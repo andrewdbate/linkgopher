@@ -11,6 +11,6 @@ To install this forked extension in Google Chrome, download this repository and 
 ## License
 Copyright (c) 2008, 2009, 2014, 2017 by Andrew Ziem. All rights reserved.
 
-Changes to copy links from all tabs by Andrew Bate.
+Changes to copy links from all tabs copyright (c) 2020 Andrew Bate.
 
 Licensed under the [GNU General Public License version 3](https://www.gnu.org/licenses/gpl-3.0.en.html) or later
