@@ -24,18 +24,28 @@
     "description": "none"
   },
 
-  "extractAll": {
-    "message": "Извлечение всех ссылок",
+  "extractThisTab": {
+    "message": "Извлечь ссылки в этой вкладке",
     "description": "none"
   },
 
-  "extractSome": {
-    "message": "Извлечение ссылок по фильтру",
+  "extractThisTabFilter": {
+    "message": "Извлечение ссылок в этой вкладке с фильтром",
+    "description": "none"
+  },
+
+  "extractAllTabs": {
+    "message": "Извлечь ссылки во всех вкладках",
+    "description": "none"
+  },
+
+  "extractAllTabsFilter": {
+    "message": "Извлечение ссылок во всех вкладках с фильтром",
     "description": "none"
   },
 
   "aboutLinkGopher": {
-    "message": "О Link Gopher",
+    "message": "О Link Gopher Fork",
     "description": "none"
   }
 }

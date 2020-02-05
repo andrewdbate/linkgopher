@@ -24,18 +24,28 @@
     "description": "none"
   },
 
-  "extractAll": {
-    "message": "Extract All Links",
+  "extractThisTab": {
+    "message": "Extract Links in This Tab",
     "description": "none"
   },
 
-  "extractSome": {
-    "message": "Extract Links by Filter",
+  "extractThisTabFilter": {
+    "message": "Extract Links in This Tab with Filter",
+    "description": "none"
+  },
+
+  "extractAllTabs": {
+    "message": "Extract Links in All Tabs",
+    "description": "none"
+  },
+
+  "extractAllTabsFilter": {
+    "message": "Extract Links in All Tabs with Filter",
     "description": "none"
   },
 
   "aboutLinkGopher": {
-    "message": "About Link Gopher",
+    "message": "About Link Gopher Fork",
     "description": "none"
   }
 }

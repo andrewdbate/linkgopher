@@ -5,6 +5,10 @@ This is a fork of Link Gopher, a web browser extension for Chrome and Firefox th
 ## Documentation
 You can find the documentation for the original Link Gopher [here](https://sites.google.com/site/linkgopher/Home).
 
+## Installation
+
+To install this forked extension in Google Chrome, go to chrome://extensions/.
+
 ## License
 Copyright (c) 2008, 2009, 2014, 2017 by Andrew Ziem. All rights reserved.
 

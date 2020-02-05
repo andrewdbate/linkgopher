@@ -1,10 +1,18 @@
 'use strict';
-document.getElementById('extract-all').addEventListener('click', event => {
-  handler(false).then(() => window.close());
+document.getElementById('extract-this-tab').addEventListener('click', event => {
+  handler(false, false).then(() => window.close());
 });
 
-document.getElementById('extract-some').addEventListener('click', event => {
-  handler(true).then(() => window.close());
+document.getElementById('extract-this-tab-filter').addEventListener('click', event => {
+  handler(false, true).then(() => window.close());
+});
+
+document.getElementById('extract-all-tabs').addEventListener('click', event => {
+  handler(true, false).then(() => window.close());
+});
+
+document.getElementById('extract-all-tabs-filter').addEventListener('click', event => {
+  handler(true, true).then(() => window.close());
 });
 
 document.getElementById('about-linkgopher').addEventListener('click', event => {
@@ -12,28 +20,40 @@ document.getElementById('about-linkgopher').addEventListener('click', event => {
   openTab(homepage_url).then(() => window.close());
 });
 
-// Localization.
+// [BEGIN] Localization.
 [
-  {id: 'extract-all', messageId: 'extractAll'},
-  {id: 'extract-some', messageId: 'extractSome'},
+  {id: 'extract-this-tab', messageId: 'extractThisTab'},
+  {id: 'extract-this-tab-filter', messageId: 'extractThisTabFilter'},
+  {id: 'extract-all-tabs', messageId: 'extractAllTabs'},
+  {id: 'extract-all-tabs-filter', messageId: 'extractAllTabsFilter'},
   {id: 'about-linkgopher', messageId: 'aboutLinkGopher'}
 ].forEach(item => {
   const container = document.getElementById(item.id);
   container.innerText = chrome.i18n.getMessage(item.messageId);
 })
+// [END] Localization.
 
 /**
  * @function handler
- * @param {boolean} filtering
+ * @param {boolean} allTabs -- obtain all tabs in current window, else current tab only
+ * @param {boolean} filtering -- true if filtering is required on the results page
  */
-function handler(filtering = false) {
-  var tabId;
-
-  return getCurrentTab()
-    .then(items => { tabId = items[0].id; return injectScript(tabId); })
-    .then(item => {
-      const url = `${chrome.extension.getURL('browser/linkgopher.html')}?` +
-                  `tabId=${tabId}&filtering=${filtering}`;
+function handler(allTabs, filtering) {
+  var firstTabId;
+  return getCurrentTab(allTabs)
+    .then(items => {
+      firstTabId = items[0].id;
+      return items.filter(tab => 
+        tab.url.startsWith("http")
+      ).map(tab =>
+        injectScript(tab.id)
+      )
+    })
+    .then(items => {
+      let url = `${chrome.extension.getURL('browser/linkgopher.html')}?`;
+      if (!allTabs)
+        url += `tabId=${firstTabId}&`
+      url += `filtering=${filtering}`;
       return openTab(url);
     })
     .catch(error => window.alert(error));
@@ -43,10 +63,13 @@ function handler(filtering = false) {
  * Get active tab of current window.
  *
  * @function getCurrentTab
+ * @param {boolean} allTabs -- obtain all tabs in current window, else current tab only
  */
-function getCurrentTab() {
+function getCurrentTab(allTabs) {
   return new Promise((res, rej) => {
-    const queryInfo = {
+    const queryInfo = allTabs ? {
+      currentWindow: true
+    } : {
       active: true,
       currentWindow: true
     };

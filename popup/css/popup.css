@@ -5,6 +5,7 @@
 
 .container > button {
   white-space: nowrap;
+  text-align: left;
 }
 .container > button:not(:last-child) {
   margin-bottom: .5em;

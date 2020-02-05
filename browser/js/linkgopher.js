@@ -13,11 +13,31 @@ const filteringDomains = location
   ? true
   : false;
 
-chrome.tabs.sendMessage(tabId, {action: 'extract'}, links => {
-  handler(links, pattern);
-});
+// TODO: pass the tab ids as comma separated values in the query string.
 
-// Localization.
+// tabId will be Nan is not present in query string.
+if (isNaN(tabId))
+{
+  // Get links for all tabs in the current window.
+  chrome.tabs.query({currentWindow: true}, function(tabs){
+    tabs.forEach(tb => {
+      chrome.tabs.sendMessage(tb.id, {action: 'extract'}, links => {
+        if (tb.url.startsWith("http")) {
+          handler(links, pattern);
+        }
+      });
+    });
+  });
+}
+else
+{
+  // Get links for the named tab only.
+  chrome.tabs.sendMessage(tabId, {action: 'extract'}, links => {
+    handler(links, pattern);
+  });
+}
+
+// [BEGIN] Localization.
 [
   {id: 'links', messageId: 'links'},
   {id: 'domains', messageId: 'domains'},
@@ -26,6 +46,7 @@ chrome.tabs.sendMessage(tabId, {action: 'extract'}, links => {
   const container = document.getElementById(item.id);
   container.dataset.content = chrome.i18n.getMessage(item.messageId);
 })
+// [END] Localization.
 
 /**
  * @function handler
@@ -33,10 +54,6 @@ chrome.tabs.sendMessage(tabId, {action: 'extract'}, links => {
  * @param {string} pattern -- Pattern for filtering.
  */
 function handler(links, pattern) {
-  if (chrome.runtime.lastError) {
-    return window.alert(chrome.runtime.lastError);
-  }
-
   // To filter links like: javascript:void(0)
   const resLinks = links.filter(link => link.lastIndexOf('://', 10) > 0);
   // Remove duplicate, sorting of links.
